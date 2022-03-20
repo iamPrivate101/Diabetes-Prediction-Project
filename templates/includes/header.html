@@ -14,10 +14,17 @@
                   <div class="menu">
                       <ul>
                           <li><a href="{% url 'diabetes:index' %}">Home</a></li>
-                          <li><a href="about-us.html">About Us</a></li>
-                          <li><a href="services.html">Services</a></li>
-                          <li><a href="blog.html">Blog</a></li>
-                          <li><a href="contact-us.html">Contact Us</a></li>
+                          <li><a href="{% url 'diabetes:about' %}">About Us</a></li>
+                          <li><a href="{% url 'diabetes:blog' %}">Blog</a></li>
+                          {% if user.is_authenticated %}
+                          <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                          {% else %}
+                          <li><a href="{% url 'users:login' %}">Login</a></li>
+                          <li><a href="{% url 'users:register' %}">Register</a></li>
+                          {% endif %}
+                     
+
+
                       </ul>
                   </div>
               </div>
