@@ -14,7 +14,7 @@ def register(request):
                 request,
                 f"Your account has been created { username } Now, You can login!",
             )
-            return redirect("users:login")
+            return redirect("login")
     else:
         form = UserRegisterForm()
     context = {
@@ -39,7 +39,7 @@ def profile(request):
                 request,
                 f"{ username }  account has been Updated !",
             )
-            return redirect("users:profile")
+            return redirect("profile")
 
     else:
         u_form = UserUpdateFrom(instance=request.user)
