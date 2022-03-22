@@ -10,3 +10,6 @@ def about(request):
 
 def blog(request):
     return render(request, 'diabetes/blog.html')
+
+def analyze(request):
+    return render(request,'diabetes/analyze.html')

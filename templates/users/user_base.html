@@ -1,3 +1,4 @@
+
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -8,19 +9,35 @@
      
     
 
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/plugins/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'font/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawsom-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="shortcut icon" href="{% static 'assets/images/fav.jpg' %}">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/fontawsom-all.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}" />
+
+    <style>
+       body {
+      background-image: url("{% static 'images/diabetes.jpg' %}");
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+  }
+    </style>
 </head>
 
 <body>
 
-
+  {% include 'includes/header.html' %}
             
   {% block content %}
   {% endblock content %}
 
+  
 
 </body>
 

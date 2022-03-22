@@ -6,6 +6,7 @@ urlpatterns = [
     path('',diabetes_views.index,name="index"),
     path('about/',diabetes_views.about,name="about"),
     path('blog/',diabetes_views.blog,name="blog"),
+    path('analyze/',diabetes_views.analyze, name='analyze'),
 
 
   
