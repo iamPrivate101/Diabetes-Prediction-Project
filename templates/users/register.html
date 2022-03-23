@@ -29,6 +29,10 @@
                             <div class="text-box-cont">
                                 <form action="" method = "POST">
                                     {% csrf_token %}
+                                    
+                                    <!-- <div  class="form-group"> <label  class=" requiredField">
+                                        FirstName<span class="asteriskField">*</span> </label> <div> <input type="text" name="fname" maxlength="150" autofocus="" class="textinput textInput form-control" required="" "> </div> </div> -->
+
                                     {{ form|crispy }}
                                
                            
