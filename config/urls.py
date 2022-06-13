@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from unicodedata import name
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -21,6 +22,11 @@ from users import views as user_views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+
+    # path("account-delete/<str:username>/", 'profile.views.account_delete',name='account_delete'),
+    # path('account-delete/<str:username>',user_views.account_delete,name='account_delete'),
+
+
     path("admin/", admin.site.urls),
     path("", include("diabetes.urls")),
     path("register/", user_views.register, name="register"),
@@ -60,6 +66,7 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name="users/password_reset_complete.html"),
         name="password_reset_complete",
     ),
+    
 ]
 
 if settings.DEBUG:

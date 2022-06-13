@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from .forms import UserRegisterForm, UserUpdateFrom, ProfileUpdateForm
 
 # Create your views here.
@@ -23,7 +25,7 @@ def register(request):
 
     return render(request, "users/register.html", context)
 
-
+#user profile update
 @login_required
 def profile(request):
     if request.method == "POST":
@@ -51,3 +53,28 @@ def profile(request):
     }
 
     return render(request, "users/profile.html", context)
+
+
+# @staff_member_required
+# def account_delete(request,username):
+#     try:
+#         u = User.objects.get(username = username)
+#         u.delete()
+#         messages.danger(
+#                 request,
+#                 f"{ username }  ACCOUNT HAS BEEN DELETED PERMANENTLY !",
+#             )
+#         return redirect ('diabetes:index')
+
+#     except User.DoesNotExist:
+#         messages.danger(
+#                 request,
+#                 f"{ username }  ACCOUNT HAS BEEN DELETED PERMANENTLY !",
+#             )
+#         return redirect ('diabetes:index')
+        
+#     except Exception as e:
+#          return render(request, 'diabetes:index',{'err':e.message})
+
+    
+#     return redirect('diabetes:index')

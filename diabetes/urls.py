@@ -7,7 +7,7 @@ urlpatterns = [
     path('about/',diabetes_views.about,name="about"),
     path('blog/',diabetes_views.blog,name="blog"),
     path('analyze/',diabetes_views.analyze, name='analyze'),
-
+    path('analyze/result/',diabetes_views.result, name='result'),
 
   
 
