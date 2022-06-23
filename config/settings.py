@@ -145,10 +145,10 @@ EMAIL_USE_TLS = True
 
 # in terminal
 # nano .bashrc 
-# export EMAIL_USER="sm6375907@gmail.com"
-# export EMAIL_PASS="testdjango"
+# EMAIL_USER="sm6375907@gmail.com"
+# EMAIL_PASS="ufjpqmbhduwywtim" #testdjango
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 

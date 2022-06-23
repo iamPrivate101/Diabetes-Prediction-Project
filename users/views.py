@@ -55,26 +55,26 @@ def profile(request):
     return render(request, "users/profile.html", context)
 
 
-# @staff_member_required
-# def account_delete(request,username):
-#     try:
-#         u = User.objects.get(username = username)
-#         u.delete()
-#         messages.danger(
-#                 request,
-#                 f"{ username }  ACCOUNT HAS BEEN DELETED PERMANENTLY !",
-#             )
-#         return redirect ('diabetes:index')
+@staff_member_required
+def account_delete(request,username):
+    try:
+        u = User.objects.get(username = username)
+        u.delete()
+        messages.danger(
+                request,
+                f"{ username }  ACCOUNT HAS BEEN DELETED PERMANENTLY !",
+            )
+        return redirect ('diabetes:index')
 
-#     except User.DoesNotExist:
-#         messages.danger(
-#                 request,
-#                 f"{ username }  ACCOUNT HAS BEEN DELETED PERMANENTLY !",
-#             )
-#         return redirect ('diabetes:index')
+    except User.DoesNotExist:
+        messages.danger(
+                request,
+                f"{ username }  ACCOUNT HAS BEEN DELETED PERMANENTLY !",
+            )
+        return redirect ('diabetes:index')
         
-#     except Exception as e:
-#          return render(request, 'diabetes:index',{'err':e.message})
+    except Exception as e:
+         return render(request, 'diabetes:index',{'err':e.message})
 
     
-#     return redirect('diabetes:index')
+    return redirect('diabetes:index')
