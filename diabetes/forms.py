@@ -7,5 +7,6 @@ class DiabetesPredictForm(forms.ModelForm):
 
     class Meta:
         model = Prediction
-        fields = ['user', 'pregnancies', 'gulcose', 'blood_pressure', 'skin_thickness', 'insuline', 'bmi', 'diabetes_pedigree', 'age'  ]
+        
+        fields = [ 'pregnancies', 'gulcose', 'blood_pressure', 'skin_thickness', 'insuline', 'bmi', 'diabetes_pedigree', 'age'  ]
 

@@ -72,6 +72,11 @@ def result(request):
 
 
 def predict(request):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user
+        #print(username)
+
     if request.method == "POST":
         form = DiabetesPredictForm(request.POST)
         # loading dataset
@@ -101,12 +106,18 @@ def predict(request):
             result1 = "Positive"
         else:
             result1 = "Negative"
+        
+        report = Prediction(result=result1)
 
-        # ins = Prediction( pregnancies=val1, gulcose =val2 , blood_pressure=val3, skin_thickness=val4,insuline=val5, bmi=val6, diabetes_pedigree=val7, age=val8,result=result1)
-
+        ins = Prediction( pregnancies=val1, gulcose =val2 , blood_pressure=val3, skin_thickness=val4,insuline=val5, bmi=val6, diabetes_pedigree=val7, age=val8,result=result1)
+       
         if form.is_valid():
-            form.save()
-            # ins.save()
+            
+            profile = form.save(commit = False)
+            profile.user = request.user
+            # report.save()
+            profile.save()
+            #ins.save()
 
             username = form.cleaned_data.get("user")
             messages.success(
@@ -114,6 +125,7 @@ def predict(request):
                 f"{ username } : Diabetes {result1} ",
                 
             )
+            
     else:
         form = DiabetesPredictForm()
 
