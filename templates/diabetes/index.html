@@ -11,19 +11,21 @@
                             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                         </ol>
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
+                            {% for object in obj %}
+                            <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}">
                                 <div class="banner-content">
-                                    <h1>Making your business <span>ideas Come true</span></h1>
+                                    <h1>{{object.title}} <span>{{object.sub_title}}</span></h1>
                                     <ol>
                                         <li><a href="#">Learn More</a></li>
                                         <li><a href="#">Get In Touch</a></li>
                                     </ol>
                                 </div>
-                            <img class="d-block w-100" src="{% static 'images/banner/slider-01.jpg' %}">
+                            <img style="height: 600px;" class="d-block w-100" src="{{object.image.url}}">
                             </div>
-                            <div class="carousel-item">
+                            {% endfor %}
+                            <!-- <div class="carousel-item">
                                 <div class="banner-content">
-                                    <h1>Making your business <span>ideas Come true</span></h1>
+                                    <h1>minimize the risk of diabetes  <span>Perdict Now</span></h1>
                                     <ol>
                                         <li><a href="#">Learn More</a></li>
                                         <li><a href="#">Get In Touch</a></li>
@@ -33,14 +35,14 @@
                             </div>
                             <div class="carousel-item">
                                 <div class="banner-content">
-                                    <h1>Making your business <span>ideas Come true</span></h1>
+                                    <h1>minimize the risk of diabetes  <span>Perdict Now</span></h1>
                                     <ol>
                                         <li><a href="#">Learn More</a></li>
                                         <li><a href="#">Get In Touch</a></li>
                                     </ol>
                                 </div>
                             <img class="d-block w-100" src="{% static 'images/banner/slider-03.jpg' %}">
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </section>
