@@ -107,19 +107,18 @@ def predict(request):
         else:
             result1 = "Negative"
         
-        report = Prediction(result=result1)
+        # report = Prediction(result=result1)
 
-        ins = Prediction( pregnancies=val1, gulcose =val2 , blood_pressure=val3, skin_thickness=val4,insuline=val5, bmi=val6, diabetes_pedigree=val7, age=val8,result=result1)
+        ins = Prediction( user = username, pregnancies=val1, gulcose =val2 , blood_pressure=val3, skin_thickness=val4,insuline=val5, bmi=val6, diabetes_pedigree=val7, age=val8,result=result1)
        
         if form.is_valid():
-            
-            profile = form.save(commit = False)
-            profile.user = request.user
-            # report.save()
-            profile.save()
-            #ins.save()
+            ins.save()
+            # to get user
+            # profile = form.save(commit = False)
+            # profile.user = request.user
+            # profile.save()
 
-            username = form.cleaned_data.get("user")
+            # username = form.cleaned_data.get("user")
             messages.success(
                 request,
                 f"{ username } : Diabetes {result1} ",
@@ -133,3 +132,14 @@ def predict(request):
         "form": form,
     }
     return render(request, "diabetes/predict.html", context)
+
+
+
+def report(request):
+    if request.user.is_authenticated:
+        username = request.user
+    obj = Prediction.objects.filter(user=username)
+    context = {
+        'obj':obj
+    }
+    return render(request, "diabetes/report.html",context)

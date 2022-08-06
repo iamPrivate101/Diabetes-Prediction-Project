@@ -9,7 +9,7 @@ urlpatterns = [
     path('analyze/',diabetes_views.analyze, name='analyze'),
     path('analyze/result/',diabetes_views.result, name='result'),
     path('predict/',diabetes_views.predict,name='predict'),
-
+    path('report/',diabetes_views.report,name="report")
   
 
 ]
