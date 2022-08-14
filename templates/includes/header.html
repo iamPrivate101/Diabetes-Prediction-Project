@@ -14,8 +14,8 @@
                   <div class="menu">
                       <ul>
                           <li><a href="{% url 'diabetes:index' %}">Home</a></li>
-                          <li><a href="{% url 'diabetes:about' %}">About Us</a></li>
                           <li><a href="{% url 'diabetes:blog' %}">Blog</a></li>
+                          <li><a href="{% url 'diabetes:about' %}">About Us</a></li>
                           {% if user.is_authenticated %}
                           <li><a href="{% url 'profile' %}">Profile</a></li>
                           <li><a href="{% url 'diabetes:predict' %}">Predict</a></li>

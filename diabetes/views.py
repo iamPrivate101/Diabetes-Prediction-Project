@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
+from django.http import HttpResponseRedirect
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -18,13 +19,11 @@ from .models import Carausel
 # Create your views here.
 
 
-#carausel
+# carausel
 def index(request):
     obj = Carausel.objects.all()
-    context = {
-        'obj':obj
-    }
-    return render(request, "diabetes/index.html",context)
+    context = {"obj": obj}
+    return render(request, "diabetes/index.html", context)
 
 
 def about(request):
@@ -40,26 +39,26 @@ def analyze(request):
 
 
 def result(request):
-    #loading dataset
+    # loading dataset
     data = pd.read_csv("diabetes.csv")
-    #train test split
+    # train test split
     X = data.drop("Outcome", axis=1)
-    Y = data['Outcome']
-    X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.2)
-    #Trainning the Model
+    Y = data["Outcome"]
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+    # Trainning the Model
     model = LogisticRegression()
-    model.fit(X_train,Y_train)
+    model.fit(X_train, Y_train)
 
-    val1 = float(request.GET['pregnancies'])
-    val2 = float(request.GET['gulcose'])
-    val3 = float(request.GET['blood_pressure'])
-    val4 = float(request.GET['skin_thickness'])
-    val5 = float(request.GET['insuline'])
-    val6 = float(request.GET['bmi'])
-    val7 = float(request.GET['diabetes_pedigree'])
-    val8 = float(request.GET['age'])
+    val1 = float(request.GET["pregnancies"])
+    val2 = float(request.GET["gulcose"])
+    val3 = float(request.GET["blood_pressure"])
+    val4 = float(request.GET["skin_thickness"])
+    val5 = float(request.GET["insuline"])
+    val6 = float(request.GET["bmi"])
+    val7 = float(request.GET["diabetes_pedigree"])
+    val8 = float(request.GET["age"])
 
-    pred = model.predict([[val1,val2,val3,val4,val5,val6,val7,val8]])
+    pred = model.predict([[val1, val2, val3, val4, val5, val6, val7, val8]])
 
     result1 = ""
     if pred == [1]:
@@ -67,15 +66,15 @@ def result(request):
     else:
         result1 = "Negative"
 
-    return render(request,"diabetes/analyze.html",{'result2':result1})
+    return render(request, "diabetes/analyze.html", {"result2": result1})
 
 
-
+# currently in USE to predict
 def predict(request):
     username = None
     if request.user.is_authenticated:
         username = request.user
-        #print(username)
+        # print(username)
 
     if request.method == "POST":
         form = DiabetesPredictForm(request.POST)
@@ -106,11 +105,22 @@ def predict(request):
             result1 = "Positive"
         else:
             result1 = "Negative"
-        
+
         # report = Prediction(result=result1)
 
-        ins = Prediction( user = username, pregnancies=val1, gulcose =val2 , blood_pressure=val3, skin_thickness=val4,insuline=val5, bmi=val6, diabetes_pedigree=val7, age=val8,result=result1)
-       
+        ins = Prediction(
+            user=username,
+            pregnancies=val1,
+            gulcose=val2,
+            blood_pressure=val3,
+            skin_thickness=val4,
+            insuline=val5,
+            bmi=val6,
+            diabetes_pedigree=val7,
+            age=val8,
+            result=result1,
+        )
+
         if form.is_valid():
             ins.save()
             # to get user
@@ -122,9 +132,8 @@ def predict(request):
             messages.success(
                 request,
                 f"{ username } : Diabetes {result1} ",
-                
             )
-            
+
     else:
         form = DiabetesPredictForm()
 
@@ -134,12 +143,67 @@ def predict(request):
     return render(request, "diabetes/predict.html", context)
 
 
+# def report(request):
+#     if request.user.is_authenticated:
+#         username = request.user
+#     obj = Prediction.objects.filter(user=username)
+#     context = {"obj": obj}
+#     return render(request, "diabetes/report.html", context)
 
 def report(request):
     if request.user.is_authenticated:
-        username = request.user
-    obj = Prediction.objects.filter(user=username)
+        userid = request.user.id
+    obj = Prediction.objects.filter(user=userid)
+    context = {"obj": obj}
+    return render(request, "diabetes/report.html", context)
+
+# # updating Reports
+# def predict_update(request, pk):
+#     context = dict()
+#     try:
+#         predict = Prediction.objects.get(id = pk)
+#     except Prediction.DoesNotExist:
+#         messages.error(request,"Item doesnt exist")
+#         return("/")
+    
+#     if request.method == "GET":
+#         context["form"] = DiabetesPredictForm(instance = predict)
+#         return render(request, "diabetes/predict_update.html", context)
+    
+#     form = DiabetesPredictForm(request.POST)
+#     if form.is_valid():
+
+#         predict.pregnancies = form.cleaned_data.get('pregnancies')
+#         predict.gulcose = form.cleaned_data.get('gulcose')
+#         predict.blood_pressure = form.cleaned_data.get('blood_pressure')
+#         predict.skin_thickness = form.cleaned_data.get('skin_thickness')
+#         predict.insuline = form.cleaned_data.get('insuline')
+#         predict.bmi = form.cleaned_data.get('bmi')
+#         predict.diabetes_pedigree = form.cleaned_data.get('diabetes_pedigree')
+#         predict.age = form.cleaned_data.get('age')  
+#         predict.save()
+#         messages.success(request,"Todo Sucessfully Updated")
+#         return redirect('/')
+#     context['form'] = form
+#     return render(request, "todo/todo_update.html", context)
+
+
+def predict_update(request, id):
+    context = dict()
+    if (request.method == "POST"):
+        predict = Prediction.objects.get(id=id)
+        form = DiabetesPredictForm(request.POST, instance=predict)
+        if (form.is_valid()):
+            form.save()
+            context['message'] = messages.success(
+            request, "Update sucessfully...!!!", )
+            return HttpResponseRedirect('/')
+    else:
+        predict = Prediction.objects.get(id=id)
+        form = DiabetesPredictForm(instance=predict)
+
     context = {
-        'obj':obj
+        'form': form,
     }
-    return render(request, "diabetes/report.html",context)
+
+    return render(request, 'diabetes/predict_update.html', context)

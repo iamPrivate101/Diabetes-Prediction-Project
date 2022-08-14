@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -152,3 +153,58 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": "Admin",
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "PREDICTION ADMIN",
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": "DIABETES ",
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": "images/logo/headerlogo.png",
+    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
+    "login_logo": "logo.png",
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome To Diabetes Prediction System",
+    # Copyright on the footer
+    "copyright": "Sameer",
+    # The model admin to search from the search bar, search bar omitted if excluded
+    "search_model": "auth.User",
+    # Whether to display the side menu
+    "show_sidebar": True,
+
+    # Whether to aut expand the menu
+    "navigation_expanded": True,
+    # Hide these apps when generating side menu e.g (auth)
+    "hide_apps": [],
+
+    # Hide these models when generating side menu (e.g auth.user)
+    "hide_models": [],
+    #shows UI controller 
+    "show_ui_builder" : True,
+
+       # Links to put along the top menu
+    "topmenu_links": [
+
+        # Url that gets reversed (Permissions can be added)
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+
+
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        {"app": "diabetes"},
+
+        # external url that opens in a new window (Permissions can be added)
+        {"name": "Support", "url": "https://github.com/iamPrivate101", "new_window": True},
+    ],
+
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",
+    "dark_mode_theme": "darkly",
+    "navbar": "navbar-dark",
+    "navbar_fixed": True,
+}
