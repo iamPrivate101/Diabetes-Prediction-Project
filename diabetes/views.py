@@ -157,53 +157,67 @@ def report(request):
     context = {"obj": obj}
     return render(request, "diabetes/report.html", context)
 
-# # updating Reports
-# def predict_update(request, pk):
-#     context = dict()
-#     try:
-#         predict = Prediction.objects.get(id = pk)
-#     except Prediction.DoesNotExist:
-#         messages.error(request,"Item doesnt exist")
-#         return("/")
-    
-#     if request.method == "GET":
-#         context["form"] = DiabetesPredictForm(instance = predict)
-#         return render(request, "diabetes/predict_update.html", context)
-    
-#     form = DiabetesPredictForm(request.POST)
-#     if form.is_valid():
 
-#         predict.pregnancies = form.cleaned_data.get('pregnancies')
-#         predict.gulcose = form.cleaned_data.get('gulcose')
-#         predict.blood_pressure = form.cleaned_data.get('blood_pressure')
-#         predict.skin_thickness = form.cleaned_data.get('skin_thickness')
-#         predict.insuline = form.cleaned_data.get('insuline')
-#         predict.bmi = form.cleaned_data.get('bmi')
-#         predict.diabetes_pedigree = form.cleaned_data.get('diabetes_pedigree')
-#         predict.age = form.cleaned_data.get('age')  
-#         predict.save()
-#         messages.success(request,"Todo Sucessfully Updated")
-#         return redirect('/')
-#     context['form'] = form
-#     return render(request, "todo/todo_update.html", context)
-
-
+#updating predict_report
 def predict_update(request, id):
     context = dict()
-    if (request.method == "POST"):
-        predict = Prediction.objects.get(id=id)
-        form = DiabetesPredictForm(request.POST, instance=predict)
-        if (form.is_valid()):
-            form.save()
-            context['message'] = messages.success(
-            request, "Update sucessfully...!!!", )
-            return HttpResponseRedirect('/')
+    try:
+        predict = Prediction.objects.get(id = id)
+    except Prediction.DoesNotExist:
+        messages.error(request,"Item doesnt exist")
+        return("/")
+    
+    if request.method == "GET":
+        context["form"] = DiabetesPredictForm(instance = predict)
+        return render(request, "diabetes/predict_update.html", context)
+    
+    if request.user.is_authenticated:
+        username = request.user
+
+    form = DiabetesPredictForm(request.POST)
+    # loading dataset
+    data = pd.read_csv("diabetes.csv")
+    # train test split
+    X = data.drop("Outcome", axis=1)
+    Y = data["Outcome"]
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+    # Trainning the Model
+    model = LogisticRegression()
+    model.fit(X_train, Y_train)
+    val1 = float(request.POST["pregnancies"])
+    val2 = float(request.POST["gulcose"])
+    val3 = float(request.POST["blood_pressure"])
+    val4 = float(request.POST["skin_thickness"])
+    val5 = float(request.POST["insuline"])
+    val6 = float(request.POST["bmi"])
+    val7 = float(request.POST["diabetes_pedigree"])
+    val8 = float(request.POST["age"])
+
+    pred = model.predict([[val1, val2, val3, val4, val5, val6, val7, val8]])
+    print(pred)
+    result1 = ""
+    if pred == [1]:
+        result1 = "Positive"
     else:
-        predict = Prediction.objects.get(id=id)
-        form = DiabetesPredictForm(instance=predict)
+        result1 = "Negative"
+    
+    if form.is_valid():
+        predict.user = username
+        predict.pregnancies = form.cleaned_data.get('pregnancies')
+        predict.gulcose = form.cleaned_data.get('gulcose')
+        predict.blood_pressure = form.cleaned_data.get('blood_pressure')
+        predict.skin_thickness = form.cleaned_data.get('skin_thickness')
+        predict.insuline = form.cleaned_data.get('insuline')
+        predict.bmi = form.cleaned_data.get('bmi')
+        predict.diabetes_pedigree = form.cleaned_data.get('diabetes_pedigree')
+        predict.age = form.cleaned_data.get('age')
+        predict.result = result1
+        predict.save()
+        messages.success(
+                request,
+                f"{ username } : Diabetes {result1} ",
+            )
+        return redirect('/')
+    context['form'] = form
+    return render(request, "diabetes/predict_update.html", context)
 
-    context = {
-        'form': form,
-    }
-
-    return render(request, 'diabetes/predict_update.html', context)

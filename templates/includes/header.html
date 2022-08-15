@@ -19,6 +19,7 @@
                           {% if user.is_authenticated %}
                           <li><a href="{% url 'profile' %}">Profile</a></li>
                           <li><a href="{% url 'diabetes:predict' %}">Predict</a></li>
+                          <li><a href="{% url 'diabetes:report' %}">History</a></li>
                           <li><a href="{% url 'logout' %}">Logout</a></li>
                           {% else %}
                           <li><a href="{% url 'login' %}">Login</a></li>

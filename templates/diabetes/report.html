@@ -41,7 +41,7 @@
                         <td>{{object.age}}</td>
                         <td>{{object.result}}</td>
                         <td >
-                          <a href="{% url 'diabetes:predict_update' %}"><i class="bi bi-pencil-square text-danger"></i></a>
+                          <a href="{% url 'diabetes:predict_update' object.id%}"><i class="bi bi-pencil-square text-danger"></i></a>
                           <a href="#"><i class="bi bi-trash-fill text-danger"></i></a>
                           
                       </td>
