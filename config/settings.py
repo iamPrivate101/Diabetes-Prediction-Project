@@ -152,7 +152,6 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Admin",
@@ -208,3 +207,4 @@ JAZZMIN_UI_TWEAKS = {
     "navbar": "navbar-dark",
     "navbar_fixed": True,
 }
+

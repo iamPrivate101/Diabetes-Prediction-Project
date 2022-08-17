@@ -24,9 +24,12 @@
     <link rel="stylesheet" href="{% static 'assets/css/fontawsom-all.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}" />
 
+    <link rel="stylesheet" href="{% static 'css/self.css' %}">
+
+
     <style>
        body {
-      background-image: url("{% static 'images/diabetes.jpg' %}");
+      background-image: url("{% static 'images/doctor.jpg' %}");
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover;
@@ -53,6 +56,7 @@
             
   {% block content %}
   {% endblock content %}
+  {% include 'includes/footer.html' %}
 
   
 

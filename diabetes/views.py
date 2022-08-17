@@ -133,6 +133,7 @@ def predict(request):
                 request,
                 f"{ username } : Diabetes {result1} ",
             )
+        return redirect("/")
 
     else:
         form = DiabetesPredictForm()
@@ -143,19 +144,33 @@ def predict(request):
     return render(request, "diabetes/predict.html", context)
 
 
+
+# predict result listing
 # def report(request):
 #     if request.user.is_authenticated:
-#         username = request.user
-#     obj = Prediction.objects.filter(user=username)
+#         userid = request.user.id
+#     obj = Prediction.objects.filter(user=userid)
 #     context = {"obj": obj}
 #     return render(request, "diabetes/report.html", context)
 
+
+# predict result listing for searching 
+from django.db.models import Q 
 def report(request):
+    context =dict()
     if request.user.is_authenticated:
         userid = request.user.id
-    obj = Prediction.objects.filter(user=userid)
-    context = {"obj": obj}
+    #for searching
+    if 'q' in request.GET:
+        q = request.GET['q'] # from search in report.html  search field  name="q"
+        multiple_q = Q(Q(pregnancies__icontains=q) | Q(result__icontains=q) | Q(age__icontains=q) )
+        context["obj"] = Prediction.objects.filter(multiple_q , user=userid)
+    #end searching
+    else:
+        context['obj'] = Prediction.objects.filter(user=userid) #creating dictionary to pass all obj of Todo model
     return render(request, "diabetes/report.html", context)
+
+
 
 
 #updating predict_report
@@ -221,3 +236,16 @@ def predict_update(request, id):
     context['form'] = form
     return render(request, "diabetes/predict_update.html", context)
 
+
+
+def predict_delete(request, id):
+    context = ()
+    try:
+        predict = Prediction.objects.get(id = id)
+        predict.delete()
+        messages.success(request, "Prediction Report Deleted!!!")
+    except predict.DoesNotExist:
+        messages.danger(request, "Prediction Doesn't Exists ")
+    
+    return redirect("/")
+    

@@ -12,6 +12,7 @@ urlpatterns = [
     path('predict/',diabetes_views.predict,name='predict'),
     path('report/',diabetes_views.report,name="report"),
     path('report/predict_update/<int:id>/',diabetes_views.predict_update,name="predict_update"),
+    path('report/predict_delete/<int:id>/',diabetes_views.predict_delete, name='predict_delete'),
 
 
   

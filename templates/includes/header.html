@@ -7,7 +7,8 @@
                   <div class="menu-burger"></div>
               </div>
               <div class="logo">
-                  <img style="height: 50px;" src="{% static 'images/logo/headerlogo.png' %}">
+                 <a href="{% url 'diabetes:index' %}"> <img style="height: 50px;" src="{% static 'images/logo/headerlogo.png' %}"></a>
+                 
               </div>
               
               <div class="menu-items">
@@ -15,12 +16,14 @@
                       <ul>
                           <li><a href="{% url 'diabetes:index' %}">Home</a></li>
                           <li><a href="{% url 'diabetes:blog' %}">Blog</a></li>
-                          <li><a href="{% url 'diabetes:about' %}">About Us</a></li>
                           {% if user.is_authenticated %}
                           <li><a href="{% url 'profile' %}">Profile</a></li>
                           <li><a href="{% url 'diabetes:predict' %}">Predict</a></li>
                           <li><a href="{% url 'diabetes:report' %}">History</a></li>
+                          
+                          
                           <li><a href="{% url 'logout' %}">Logout</a></li>
+                          
                           {% else %}
                           <li><a href="{% url 'login' %}">Login</a></li>
                           <li><a href="{% url 'register' %}">Register</a></li>

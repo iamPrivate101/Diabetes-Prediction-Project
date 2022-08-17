@@ -33,6 +33,7 @@ class Prediction(models.Model):
     class Meta:
         verbose_name = "Report"
         verbose_name_plural = "Reports"
+        ordering = ['-date_posted']
     
 
     
