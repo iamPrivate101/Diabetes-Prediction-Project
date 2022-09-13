@@ -19,12 +19,13 @@
                 <button onclick="makePdf()" type="button" class="btn btn-primary float-right" style="
                   margin-bottom: 20px;
               " >Print</button>  </h2> 
-                  <table  id="report" class="table table-hover">
+                  <table  id="report" class="table table-hover" border="1" >
+
                     <thead>
                       
                       <tr class="table-active">
                         <th scope="col">SN</th>
-                        <th scope="col">Name</th>
+                        
                         <th scope="col">Date</th>
                         <th scope="col">Pregnancies</th>
                         <th scope="col">Gulcose</th>
@@ -44,7 +45,7 @@
                       {% for object in obj %}
                       <tr class="{% if object.result == 'Positive' %} table-danger {% else %} table-success {% endif %}">
                         <th scope="row">{{forloop.counter}}</th>
-                        <td>{{object.user}}</td>
+                       
                         <td>{{object.date_posted}}</td>
                         <td>{{object.pregnancies}}</td>
                         <td>{{object.gulcose}}</td>
@@ -74,12 +75,12 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <form class="d-flex">
+          <!-- <form class="d-flex">
             <input class="form-control me-2" name="q" type="search" placeholder="Search Your Result(Positive, Negative , Age)" aria-label="Search">
             <button type="submit" class="btn btn-primary" style="
             margin-bottom: 20px;
         " >Search</button>
-          </form>
+          </form> -->
         </div>
         <div class="col">
           <nav aria-label="Page navigation example">
@@ -94,7 +95,7 @@
         </div>
       </div>
     </div>
-
+<br>
 
 <script>
   function makePdf(){

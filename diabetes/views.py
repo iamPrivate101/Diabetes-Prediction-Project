@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,8 +13,7 @@ from .forms import DiabetesPredictForm
 from django.contrib import messages
 from diabetes.models import Prediction
 
-from .models import Carausel
-
+from .models import Carausel, DiabetesTypes
 
 # Create your views here.
 
@@ -22,7 +21,11 @@ from .models import Carausel
 # carausel
 def index(request):
     obj = Carausel.objects.all()
-    context = {"obj": obj}
+    diabetes_type = DiabetesTypes.objects.all()
+    context = {
+        "obj": obj,
+        "diabetes_type":diabetes_type,
+        }
     return render(request, "diabetes/index.html", context)
 
 
@@ -83,7 +86,9 @@ def predict(request):
         # train test split
         X = data.drop("Outcome", axis=1)
         Y = data["Outcome"]
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+        X_train, X_test, Y_train, Y_test = train_test_split(X,
+                                                            Y,
+                                                            test_size=0.2)
         # Trainning the Model
         model = LogisticRegression()
         model.fit(X_train, Y_train)
@@ -97,7 +102,8 @@ def predict(request):
         val7 = float(request.POST["diabetes_pedigree"])
         val8 = float(request.POST["age"])
 
-        pred = model.predict([[val1, val2, val3, val4, val5, val6, val7, val8]])
+        pred = model.predict([[val1, val2, val3, val4, val5, val6, val7,
+                               val8]])
         print(pred)
 
         result1 = ""
@@ -144,7 +150,6 @@ def predict(request):
     return render(request, "diabetes/predict.html", context)
 
 
-
 # predict result listing
 # def report(request):
 #     if request.user.is_authenticated:
@@ -153,39 +158,42 @@ def predict(request):
 #     context = {"obj": obj}
 #     return render(request, "diabetes/report.html", context)
 
+# predict result listing for searching
+from django.db.models import Q
 
-# predict result listing for searching 
-from django.db.models import Q 
+
 def report(request):
-    context =dict()
+    context = dict()
     if request.user.is_authenticated:
         userid = request.user.id
     #for searching
     if 'q' in request.GET:
-        q = request.GET['q'] # from search in report.html  search field  name="q"
-        multiple_q = Q(Q(pregnancies__icontains=q) | Q(result__icontains=q) | Q(age__icontains=q) )
-        context["obj"] = Prediction.objects.filter(multiple_q , user=userid)
+        q = request.GET[
+            'q']  # from search in report.html  search field  name="q"
+        multiple_q = Q(
+            Q(pregnancies__icontains=q) | Q(result__icontains=q)
+            | Q(age__icontains=q))
+        context["obj"] = Prediction.objects.filter(multiple_q, user=userid)
     #end searching
     else:
-        context['obj'] = Prediction.objects.filter(user=userid) #creating dictionary to pass all obj of Todo model
+        context['obj'] = Prediction.objects.filter(
+            user=userid)  #creating dictionary to pass all obj of Todo model
     return render(request, "diabetes/report.html", context)
-
-
 
 
 #updating predict_report
 def predict_update(request, id):
     context = dict()
     try:
-        predict = Prediction.objects.get(id = id)
+        predict = Prediction.objects.get(id=id)
     except Prediction.DoesNotExist:
-        messages.error(request,"Item doesnt exist")
-        return("/")
-    
+        messages.error(request, "Item doesnt exist")
+        return ("/")
+
     if request.method == "GET":
-        context["form"] = DiabetesPredictForm(instance = predict)
+        context["form"] = DiabetesPredictForm(instance=predict)
         return render(request, "diabetes/predict_update.html", context)
-    
+
     if request.user.is_authenticated:
         username = request.user
 
@@ -215,7 +223,7 @@ def predict_update(request, id):
         result1 = "Positive"
     else:
         result1 = "Negative"
-    
+
     if form.is_valid():
         predict.user = username
         predict.pregnancies = form.cleaned_data.get('pregnancies')
@@ -229,23 +237,21 @@ def predict_update(request, id):
         predict.result = result1
         predict.save()
         messages.success(
-                request,
-                f"{ username } : Diabetes {result1} ",
-            )
+            request,
+            f"{ username } : Diabetes {result1} ",
+        )
         return redirect('/')
     context['form'] = form
     return render(request, "diabetes/predict_update.html", context)
 
 
-
 def predict_delete(request, id):
     context = ()
     try:
-        predict = Prediction.objects.get(id = id)
+        predict = Prediction.objects.get(id=id)
         predict.delete()
         messages.success(request, "Prediction Report Deleted!!!")
     except predict.DoesNotExist:
         messages.danger(request, "Prediction Doesn't Exists ")
-    
+
     return redirect("/")
-    
